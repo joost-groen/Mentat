@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults autowire="true" autoconfigure="true" public="false"/>
+
+        <!-- register your Greeter service here -->
+        <service id="JoostGroen\Mentat\Service\Greeter"/>
+        <!-- register your command here -->
+        <service id="JoostGroen\Mentat\Command\GreetCommand"/>
+
+        <!-- register your entity definitions here -->
+        <service id="JoostGroen\Mentat\Core\Content\MentatCategory\MentatCategoryDefinition">
+            <tag name="shopware.entity.definition"/>
+        </service>
+
+        <service id="JoostGroen\Mentat\Command\CreateCategoryCommand">
+            <argument type="service" id="mentat_category.repository"/>
+        </service>
+
+    </services>
+</container>
