@@ -19,12 +19,19 @@
     "require": {
         "shopware/core": "^6.7.0",
         "shopware/administration": "^6.7.0",
-        "shopware/storefront": "^6.7.0"
+        "shopware/storefront": "^6.7.0",
+        "smalot/pdfparser": "^2.12"
     },
     "authors": [
         {
             "name": "Joost Groen",
             "email": "joostgroen08@gmail.com"
         }
-    ]
+    ],
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true,
+            "php-http/discovery": true
+        }
+    }
 }
