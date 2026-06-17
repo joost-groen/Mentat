@@ -10,6 +10,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 
 #[AsCommand(name: 'mentat:category:create')]
 class CreateCategoryCommand extends Command
@@ -25,13 +26,16 @@ class CreateCategoryCommand extends Command
         // Context = "who is doing this and in what language." For a CLI script, the default is fine.
         $context = Context::createDefaultContext();
 
+        $name = $input->getArgument('name');
+        $technicalName = $input->getArgument('technicalName');
+
         // WRITE: save one new category.
         // Note: an array OF arrays (each inner array = one row), and camelCase keys.
         $this->repository->create([
             [
                 'id' => Uuid::randomHex(),
-                'name' => 'Laser printers',
-                'technicalName' => 'laser_printers',
+                'name' => $name,
+                'technicalName' => $technicalName,
             ],
         ], $context);
 
@@ -46,5 +50,12 @@ class CreateCategoryCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    protected function configure(): void
+    {
+        $this
+            ->addArgument('name', InputArgument::REQUIRED, 'The display name')
+            ->addArgument('technicalName', InputArgument::REQUIRED, 'The technical key');
     }
 }
