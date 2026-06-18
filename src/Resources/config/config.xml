@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+
+    <card>
+        <title>Gemini API</title>
+
+        <input-field type="password">
+            <name>apiKey</name>
+            <label>Gemini API key</label>
+        </input-field>
+
+        <input-field type="text">
+            <name>model</name>
+            <label>Model</label>
+            <defaultValue>gemini-3.1-flash-lite</defaultValue>
+        </input-field>
+    </card>
+</config>
