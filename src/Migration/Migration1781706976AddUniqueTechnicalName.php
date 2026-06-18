@@ -14,11 +14,11 @@ class Migration1781706976AddUniqueTechnicalName extends MigrationStep
 
     public function update(Connection $connection): void
     {
-        $sql = <<<SQL
-            ALTER TABLE `mentat_category` ADD CONSTRAINT `uniq.mentat_category.technical_name` UNIQUE (`technical_name`);
-        SQL;
+        if ($connection->executeQuery('SHOW INDEX FROM `mentat_category` WHERE `Key_name` = :name',['name' => 'uniq.mentat_category.technical_name'])->fetchOne()) {
+            return;
+        }
 
-        $connection->executeStatement($sql);
+        $connection->executeStatement('ALTER TABLE `mentat_category` ADD CONSTRAINT `uniq.mentat_category.technical_name` UNIQUE (`technical_name`)');
     }
 
     public function updateDestructive(Connection $connection): void
