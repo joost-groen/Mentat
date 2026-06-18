@@ -9,6 +9,9 @@
         <service id="JoostGroen\Mentat\Service\Greeter"/>
         <!-- register your command here -->
         <service id="JoostGroen\Mentat\Command\GreetCommand"/>
+        <service id="JoostGroen\Mentat\Command\ExtractPdfCommand">
+            <argument type="service" id="JoostGroen\Mentat\Service\PdfTextExtractor"/>
+        </service>
 
         <!-- register your entity definitions here -->
         <service id="JoostGroen\Mentat\Core\Content\MentatCategory\MentatCategoryDefinition">
@@ -17,6 +20,12 @@
 
         <service id="JoostGroen\Mentat\Command\CreateCategoryCommand">
             <argument type="service" id="mentat_category.repository"/>
+        </service>
+
+        <service id="Smalot\PdfParser\Parser"/>
+
+        <service id="JoostGroen\Mentat\Service\PdfTextExtractor">
+            <argument type="service" id="Smalot\PdfParser\Parser"/>
         </service>
 
     </services>
