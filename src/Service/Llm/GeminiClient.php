@@ -14,12 +14,13 @@ class GeminiClient implements LlmClientInterface
     public function extract(string $pdfPath, string $prompt, array $schema): array
     {
         if(!is_file($pdfPath)) {
-            throw new \InvalidArgumentException('PDF file not found');
+            throw new \InvalidArgumentException('PDF file not found: ' . $pdfPath);
         }
+
+        
 
         $apiKey = $this->systemConfig->getString('JoostGroenMentat.config.apiKey');
         $model  = $this->systemConfig->getString('JoostGroenMentat.config.model');
-        $pdfData = base64_encode(file_get_contents($pdfPath));
 
         if($apiKey === '') {
             throw new \InvalidArgumentException('API key not found');
@@ -28,6 +29,12 @@ class GeminiClient implements LlmClientInterface
         if($model === '') {
             throw new \InvalidArgumentException('Model not found');
         }
+
+        $bytes = file_get_contents($pdfPath);
+        if ($bytes === false) {
+            throw new \RuntimeException('Failed to read PDF file: ' . $pdfPath);
+        }
+        $pdfData = base64_encode($bytes);
 
         $body = [
             'contents' => [[
