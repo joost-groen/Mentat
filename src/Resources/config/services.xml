@@ -31,7 +31,9 @@
             <argument type="service" id="mentat_category.repository"/>
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\LlmClientInterface"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Llm\ResultValidator"/>
         </service>
+        
 
         <!-- Entity Definitions -->
         <service id="JoostGroen\Mentat\Core\Content\MentatCategory\MentatCategoryDefinition">
@@ -54,6 +56,8 @@
                 alias="JoostGroen\Mentat\Service\Llm\GeminiClient"/>
 
         <service id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
+
+        <service id="JoostGroen\Mentat\Service\Llm\ResultValidator"/>
 
     </services>
 </container>

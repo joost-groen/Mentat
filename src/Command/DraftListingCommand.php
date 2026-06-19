@@ -13,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use JoostGroen\Mentat\Service\Llm\ResultValidator;
 
 #[AsCommand(name: 'mentat:listing:draft')]
 class DraftListingCommand extends Command
@@ -21,6 +22,7 @@ class DraftListingCommand extends Command
         private EntityRepository $repository,
         private PromptBuilder $promptBuilder,
         private LlmClientInterface $llm,
+        private ResultValidator $resultValidator,
     ) {
         parent::__construct();
     }
@@ -50,7 +52,18 @@ class DraftListingCommand extends Command
 
         $built = $this->promptBuilder->build($category->getTemplate());
         $result = $this->llm->extract($pdfPath, $built->prompt, $built->schema);
-        $output->writeln(json_encode($result, JSON_PRETTY_PRINT));
+
+
+        $validation = $this->resultValidator->validate($built->schema, $result);
+
+        $output->writeln(json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+
+        if ($validation->emptyFields !== []) {
+            $output->writeln('Warning: Some fields were not found in PDF (please review): ' . implode(', ', $validation->emptyFields));
+        }
+        if ($validation->missing !== []) {
+            $output->writeln('Warning: Some fields were missing from the response (schema not honored): ' . implode(', ', $validation->missing));
+        }
 
         return Command::SUCCESS;
     }

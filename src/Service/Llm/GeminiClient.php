@@ -54,6 +54,8 @@ class GeminiClient implements LlmClientInterface
         $response = $this->httpClient->request('POST', $url, [
             'headers' => ['x-goog-api-key' => $apiKey],
             'json'    => $body,
+            'timeout'      => 30,
+            'max_duration' => 120,
         ]);
 
         $data = $response->toArray();
