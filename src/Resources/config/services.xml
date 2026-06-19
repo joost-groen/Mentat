@@ -15,6 +15,9 @@
         <service id="JoostGroen\Mentat\Command\TestLlmCommand">
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\LlmClientInterface"/>
         </service>
+        <service id="JoostGroen\Mentat\Command\SeedCategoryCommand">
+            <argument type="service" id="mentat_category.repository"/>
+        </service>
 
         <!-- register your entity definitions here -->
         <service id="JoostGroen\Mentat\Core\Content\MentatCategory\MentatCategoryDefinition">
