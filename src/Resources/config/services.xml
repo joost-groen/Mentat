@@ -32,7 +32,7 @@
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\LlmClientInterface"/>
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\ResultValidator"/>
-            <argument type="service" id="JoostGroen\Mentat\Service\Listing\DescriptionRenderer"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Listing\ProductDraftWriter"/>
         </service>
         
 
@@ -61,6 +61,13 @@
         <service id="JoostGroen\Mentat\Service\Llm\ResultValidator"/>
 
         <service id="JoostGroen\Mentat\Service\Listing\DescriptionRenderer"/>
+
+        <service id="JoostGroen\Mentat\Service\Listing\ProductDraftWriter">
+            <argument type="service" id="product.repository"/>
+            <argument type="service" id="tax.repository"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Listing\DescriptionRenderer"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
+        </service>
 
     </services>
 </container>

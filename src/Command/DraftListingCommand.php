@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use JoostGroen\Mentat\Service\Llm\ResultValidator;
-use JoostGroen\Mentat\Service\Listing\DescriptionRenderer;
+use JoostGroen\Mentat\Service\Listing\ProductDraftWriter;
 
 #[AsCommand(name: 'mentat:listing:draft')]
 class DraftListingCommand extends Command
@@ -24,7 +24,7 @@ class DraftListingCommand extends Command
         private PromptBuilder $promptBuilder,
         private LlmClientInterface $llm,
         private ResultValidator $resultValidator,
-        private DescriptionRenderer $descriptionRenderer,
+        private ProductDraftWriter $productDraftWriter,
     ) {
         parent::__construct();
     }
@@ -34,7 +34,10 @@ class DraftListingCommand extends Command
         $this
             ->addArgument('path', InputArgument::REQUIRED, 'The path to the PDF file')
             ->addArgument('technicalName', InputArgument::REQUIRED, 'The technical name of the category')       
-            ->addArgument('name', InputArgument::REQUIRED, 'The name of the product');    
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the product')
+            ->addArgument('productNumber', InputArgument::REQUIRED, 'The product number of the product')
+            ->addArgument('price', InputArgument::REQUIRED, 'The price of the product')
+            ->addArgument('stock', InputArgument::REQUIRED, 'The stock of the product');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -44,6 +47,9 @@ class DraftListingCommand extends Command
         $pdfPath       = $input->getArgument('path');
         $technicalName = $input->getArgument('technicalName');
         $name          = $input->getArgument('name');
+        $productNumber = $input->getArgument('productNumber');
+        $price         = (float) $input->getArgument('price');
+        $stock         = (int) $input->getArgument('stock');
 
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('technicalName', $technicalName));
@@ -69,8 +75,9 @@ class DraftListingCommand extends Command
             $output->writeln('Warning: Some fields were missing from the response (schema not honored): ' . implode(', ', $validation->missing));
         }
 
-        $description = $this->descriptionRenderer->render($category->getTemplate(), $result, $name);
-        $output->writeln($description);
+        $idNewProduct = $this->productDraftWriter->write($category->getTemplate(), $result, $name, $productNumber, $price, $stock, $context);
+
+        $output->writeln('New product created with ID: ' . $idNewProduct);
 
         return Command::SUCCESS;
     }
