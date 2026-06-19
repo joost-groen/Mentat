@@ -32,6 +32,7 @@
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\LlmClientInterface"/>
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\ResultValidator"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Listing\DescriptionRenderer"/>
         </service>
         
 
@@ -58,6 +59,8 @@
         <service id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
 
         <service id="JoostGroen\Mentat\Service\Llm\ResultValidator"/>
+
+        <service id="JoostGroen\Mentat\Service\Listing\DescriptionRenderer"/>
 
     </services>
 </container>

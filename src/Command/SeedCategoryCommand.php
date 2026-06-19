@@ -29,7 +29,6 @@ class SeedCategoryCommand extends Command
             'sections' => [
                 ['type' => 'title',       'key' => 'catchphrase', 'instruction' => 'A short German catchphrase for the ideal use/user, e.g. "Multifunktionsdrucker für große Arbeitsgruppen". No product name.'],
                 ['type' => 'description', 'key' => 'description', 'instruction' => 'A 2–3 sentence general product description in German.'],
-                ['type' => 'description', 'key' => 'price', 'instruction' => 'The price of the product in euros.'],
                 ['type' => 'table', 'heading' => 'Printing Stats', 'rows' => [
                     ['key' => 'printSpeed',      'label' => 'Print speed (colour + b/w)'],
                     ['key' => 'printResolution', 'label' => 'Printing resolution'],
@@ -40,7 +39,7 @@ class SeedCategoryCommand extends Command
                     ['key' => 'copyResolution', 'label' => 'Copying resolution'],
                     ['key' => 'adf',     'label' => 'ADF (yes/no)'],
                 ]],
-                ['type' => 'legal', 'content' => '<p>The product is subject to the laws of Germany.</p>'],
+                ['type' => 'legal', 'content' => 'The product is subject to the laws of Germany.'],
             ],
         ];
 

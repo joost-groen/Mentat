@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use JoostGroen\Mentat\Service\Llm\ResultValidator;
+use JoostGroen\Mentat\Service\Listing\DescriptionRenderer;
 
 #[AsCommand(name: 'mentat:listing:draft')]
 class DraftListingCommand extends Command
@@ -23,6 +24,7 @@ class DraftListingCommand extends Command
         private PromptBuilder $promptBuilder,
         private LlmClientInterface $llm,
         private ResultValidator $resultValidator,
+        private DescriptionRenderer $descriptionRenderer,
     ) {
         parent::__construct();
     }
@@ -31,7 +33,8 @@ class DraftListingCommand extends Command
     {
         $this
             ->addArgument('path', InputArgument::REQUIRED, 'The path to the PDF file')
-            ->addArgument('technicalName', InputArgument::REQUIRED, 'The technical name of the category');              
+            ->addArgument('technicalName', InputArgument::REQUIRED, 'The technical name of the category')       
+            ->addArgument('name', InputArgument::REQUIRED, 'The name of the product');    
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -40,6 +43,7 @@ class DraftListingCommand extends Command
 
         $pdfPath       = $input->getArgument('path');
         $technicalName = $input->getArgument('technicalName');
+        $name          = $input->getArgument('name');
 
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('technicalName', $technicalName));
@@ -64,6 +68,9 @@ class DraftListingCommand extends Command
         if ($validation->missing !== []) {
             $output->writeln('Warning: Some fields were missing from the response (schema not honored): ' . implode(', ', $validation->missing));
         }
+
+        $description = $this->descriptionRenderer->render($category->getTemplate(), $result, $name);
+        $output->writeln($description);
 
         return Command::SUCCESS;
     }
