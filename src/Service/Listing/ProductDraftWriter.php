@@ -8,9 +8,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use Psr\Log\LoggerInterface;
 
 class ProductDraftWriter
 {
@@ -19,7 +17,6 @@ class ProductDraftWriter
         private EntityRepository $taxRepository,
         private DescriptionRenderer $descriptionRenderer,
         private SystemConfigService $systemConfigService,
-        private LoggerInterface $logger,
     ) {
     }
 
@@ -32,7 +29,6 @@ class ProductDraftWriter
         $id = Uuid::randomHex();
         $taxId = $this->getDefaultTaxId();
         $taxRate = $this->getTaxRate($taxId, $context);
-        $this->logger->debug('Resolved tax rate', ['taxId' => $taxId, 'taxRate' => $taxRate]);
         $description = $this->descriptionRenderer->render($template, $values, $name);
 
 
