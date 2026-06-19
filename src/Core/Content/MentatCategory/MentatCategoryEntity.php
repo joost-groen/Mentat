@@ -11,6 +11,9 @@ class MentatCategoryEntity extends Entity
 
     protected string $name;
     protected string $technicalName;
+    protected ?array $template = null; //array or null
+
+    //Getters and setters for the properties
 
     public function getName(): string
     {
@@ -30,5 +33,15 @@ class MentatCategoryEntity extends Entity
     public function setTechnicalName(string $technicalName): void
     {
         $this->technicalName = $technicalName;
+    }
+
+    public function getTemplate(): ?array
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?array $template): void
+    {
+        $this->template = $template;
     }
 }

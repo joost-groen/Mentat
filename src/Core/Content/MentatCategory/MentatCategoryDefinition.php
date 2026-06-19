@@ -10,6 +10,7 @@ use Shopware\Core\Framework\DataAbstractionLayer\Field\CreatedAtField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Shopware\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
+use Shopware\Core\Framework\DataAbstractionLayer\Field\JsonField;
 
 class MentatCategoryDefinition extends EntityDefinition
 {
@@ -38,6 +39,7 @@ class MentatCategoryDefinition extends EntityDefinition
             (new StringField('technical_name', 'technicalName'))->addFlags(new Required()),
             new CreatedAtField(),
             new UpdatedAtField(),
+            new JsonField('template', 'template'),
         ]);
     }
 }
