@@ -5,21 +5,35 @@
     <services>
         <defaults autowire="true" autoconfigure="true" public="false"/>
 
-        <!-- register your Greeter service here -->
+        <!-- Commands -->
         <service id="JoostGroen\Mentat\Service\Greeter"/>
-        <!-- register your command here -->
+
         <service id="JoostGroen\Mentat\Command\GreetCommand"/>
+
         <service id="JoostGroen\Mentat\Command\ExtractPdfCommand">
             <argument type="service" id="JoostGroen\Mentat\Service\PdfTextExtractor"/>
         </service>
+
         <service id="JoostGroen\Mentat\Command\TestLlmCommand">
             <argument type="service" id="JoostGroen\Mentat\Service\Llm\LlmClientInterface"/>
         </service>
+
         <service id="JoostGroen\Mentat\Command\SeedCategoryCommand">
             <argument type="service" id="mentat_category.repository"/>
         </service>
 
-        <!-- register your entity definitions here -->
+        <service id="JoostGroen\Mentat\Command\PromptTestCommand">
+            <argument type="service" id="mentat_category.repository"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
+        </service>
+
+        <service id="JoostGroen\Mentat\Command\DraftListingCommand">
+            <argument type="service" id="mentat_category.repository"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Llm\LlmClientInterface"/>
+        </service>
+
+        <!-- Entity Definitions -->
         <service id="JoostGroen\Mentat\Core\Content\MentatCategory\MentatCategoryDefinition">
             <tag name="shopware.entity.definition"/>
         </service>
@@ -38,6 +52,8 @@
 
         <service id="JoostGroen\Mentat\Service\Llm\LlmClientInterface"
                 alias="JoostGroen\Mentat\Service\Llm\GeminiClient"/>
+
+        <service id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
 
     </services>
 </container>
