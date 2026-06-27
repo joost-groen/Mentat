@@ -61,6 +61,10 @@ class DraftListingCommand extends Command
         }
 
         $built = $this->promptBuilder->build($category->getTemplate());
+
+        $output->writeln($built->prompt);
+        $output->writeln(json_encode($built->schema, JSON_PRETTY_PRINT));
+        
         $result = $this->llm->extract($pdfPath, $built->prompt, $built->schema);
 
 

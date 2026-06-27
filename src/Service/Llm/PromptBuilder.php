@@ -28,6 +28,14 @@ class PromptBuilder
                     break;
                 case 'legal':
                     break;
+                case 'SEO-title':
+                    $properties[$section['key']] = ['type' => 'string'];
+                    $lines[] = '- ' . $section['key'] . ': ' . $section['instruction'];
+                    break;
+                case 'SEO-description':
+                    $properties[$section['key']] = ['type' => 'string'];
+                    $lines[] = '- ' . $section['key'] . ': ' . $section['instruction'];
+                    break;
             }
         }
 

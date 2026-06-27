@@ -40,6 +40,8 @@ class SeedCategoryCommand extends Command
                     ['key' => 'adf',     'label' => 'ADF (yes/no)'],
                 ]],
                 ['type' => 'legal', 'content' => 'The product is subject to the laws of Germany.'],
+                ['type' => 'SEO-title', 'key' => 'seoTitle', 'instruction' => 'A short SEO title in German.'],
+                ['type' => 'SEO-description', 'key' => 'seoDescription', 'instruction' => 'A 2–3 sentence SEO description in German.'],
             ],
         ];
 

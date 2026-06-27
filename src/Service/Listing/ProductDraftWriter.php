@@ -49,6 +49,8 @@ class ProductDraftWriter
                 'taxId'         => $taxId,
                 'description'   => $description,
                 'active'        => false,
+                'metaTitle'      => $values['seoTitle'] ?? '',
+                'metaDescription' => $values['seoDescription'] ?? '',
             ]
         ], $context);
 
