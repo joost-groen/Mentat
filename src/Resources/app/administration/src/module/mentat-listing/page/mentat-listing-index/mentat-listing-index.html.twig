@@ -1,0 +1,17 @@
+{% block mentat_listing_index %}
+    <sw-page>
+        <template #smart-bar-header>
+            <h2>Mentat – Create listing</h2>
+        </template>
+
+        <template #content>
+            <mt-card title="Product" position-identifier="mentat-listing-product">
+                <mt-text-field label="Product name" v-model="productName" />
+                <mt-text-field label="Price" v-model="price" />
+                <mt-text-field label="Stock" v-model="stock" />
+                <mt-select label="Category" v-model="categoryId" :options="categories" />
+                <p>Live preview: {{ productName }} - {{ price }}$ - Stock: {{ stock }}</p>
+            </mt-card>
+        </template>
+    </sw-page>
+{% endblock %}
