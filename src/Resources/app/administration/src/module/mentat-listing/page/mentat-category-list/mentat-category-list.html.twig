@@ -1,0 +1,21 @@
+{% block mentat_category_list %}
+    <sw-page>
+        <template #smart-bar-header><h2>Mentat – Categories</h2></template>
+
+        <template #content>
+            <mt-card title="Existing categories" position-identifier="mentat-category-existing">
+                <ul>
+                    <li v-for="category in categories" :key="category.id">
+                        {{ category.name }}
+                    </li>
+                </ul>
+            </mt-card>
+
+            <mt-card title="Add a category" position-identifier="mentat-category-add">
+                <mt-text-field label="Name" v-model="name" />            {# (B) bind to name #}
+                <mt-text-field label="Technical name" v-model="technicalName" />  {# (B) bind to technicalName #}
+                <mt-button variant="primary" @click="createCategory">Save</mt-button>  {# (C) run createCategory on click #}
+            </mt-card>
+        </template>
+    </sw-page>
+{% endblock %}

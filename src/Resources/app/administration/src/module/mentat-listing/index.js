@@ -1,4 +1,6 @@
+import './acl';
 import './page/mentat-listing-index';
+import './page/mentat-category-list';
 
 Shopware.Module.register('mentat-listing', {
     type: 'plugin',
@@ -13,6 +15,10 @@ Shopware.Module.register('mentat-listing', {
             component: 'mentat-listing-index',
             path: 'index',
         },
+        category: {
+            component: 'mentat-category-list',
+            path: 'category',
+        },
     },
 
     navigation: [{
@@ -23,5 +29,14 @@ Shopware.Module.register('mentat-listing', {
         icon: 'regular-shopping-bag',
         parent: 'sw-catalogue',
         position: 100,
+    },
+    {
+        id: 'mentat-category',
+        label: 'Mentat - Create Categories',
+        color: '#ff3d58',
+        path: 'mentat.listing.category',
+        icon: 'regular-list',
+        parent: 'sw-catalogue',
+        position: 101,
     }],
 });

@@ -14,22 +14,24 @@ Shopware.Component.register('mentat-listing-index', {
     },
 
     computed: {
-        categories() {
+        categoryRepository() {
             return this.repositoryFactory.create('mentat_category');
         },
     },
 
-    // Load categories when the component is created
     created() {
         this.loadCategories();
     },
 
     methods: {
-        // Load categories from the repository
         async loadCategories() {
-            const criteria = new Shopware.Data.Criteria();
-            const result = await this.categoryRepository.search(criteria, Shopware.Context.api);
-            this.categories = result.map(c => ({ label: c.name, value: c.id }));
+            try {
+                const criteria = new Shopware.Data.Criteria();
+                const result = await this.categoryRepository.search(criteria, Shopware.Context.api);
+                this.categories = result.map(c => ({ label: c.name, value: c.id }));
+            } catch (error) {
+                window.alert('Could not load categories: ' + (error.message || 'unknown error'));
+            }
         },
     },
 });
