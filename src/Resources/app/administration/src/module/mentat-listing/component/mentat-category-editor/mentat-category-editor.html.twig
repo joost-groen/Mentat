@@ -1,0 +1,47 @@
+<div class="mentat-category-list__editor">
+    <div class="mentat-category-list__editor-header">
+        <div>
+            <h3>{{ title }}</h3>
+            <p>{{ description }}</p>
+        </div>
+
+        <div class="mentat-category-list__actions">
+            <mt-button v-if="showCancel" @click="onCancel">Cancel</mt-button>
+            <mt-button variant="primary" @click="onSave">{{ saveLabel }}</mt-button>
+        </div>
+    </div>
+
+    <div class="mentat-category-list__field-grid">
+        <mt-text-field label="Name" v-model="draft.name" />
+        <mt-text-field label="Technical name" v-model="draft.technicalName" />
+    </div>
+
+    <div class="mentat-category-list__section-header">
+        <h4>Template sections</h4>
+
+        <div class="mentat-category-list__add-section">
+            <select v-model="selectedSectionType">
+                <option
+                    v-for="sectionType in sectionTypes"
+                    :key="sectionType.value"
+                    :value="sectionType.value"
+                >
+                    {{ sectionType.label }}
+                </option>
+            </select>
+            <mt-button @click="addSection">Add section</mt-button>
+        </div>
+    </div>
+
+    <div v-if="draft.template.sections.length === 0" class="mentat-category-list__empty-state">
+        Add a section to start building the category template.
+    </div>
+
+    <mentat-template-section
+        v-for="(section, sectionIndex) in draft.template.sections"
+        :key="sectionIndex"
+        :draft="draft"
+        :section="section"
+        :section-index="sectionIndex"
+    />
+</div>

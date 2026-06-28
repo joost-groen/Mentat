@@ -1,21 +1,56 @@
 {% block mentat_category_list %}
-    <sw-page>
+    <sw-page class="mentat-category-list">
         <template #smart-bar-header><h2>Mentat – Categories</h2></template>
 
         <template #content>
-            <mt-card title="Existing categories" position-identifier="mentat-category-existing">
-                <ul>
-                    <li v-for="category in categories" :key="category.id">
-                        {{ category.name }}
-                    </li>
-                </ul>
-            </mt-card>
+            <div class="mentat-category-list__content">
+                <mt-card title="Existing categories" position-identifier="mentat-category-existing">
+                    <div v-if="categories.length === 0" class="mentat-category-list__empty-state">
+                        No categories yet. Create your first category below.
+                    </div>
 
-            <mt-card title="Add a category" position-identifier="mentat-category-add">
-                <mt-text-field label="Name" v-model="name" />            {# (B) bind to name #}
-                <mt-text-field label="Technical name" v-model="technicalName" />  {# (B) bind to technicalName #}
-                <mt-button variant="primary" @click="createCategory">Save</mt-button>  {# (C) run createCategory on click #}
-            </mt-card>
+                    <div
+                        v-for="category in categories"
+                        :key="category.id"
+                        class="mentat-category-list__category"
+                    >
+                        <mentat-category-editor
+                            v-if="editingCategoryId === category.id"
+                            :draft="editingCategoryDraft"
+                            title="Edit category"
+                            description="Manage the fields Mentat should extract for this category."
+                            save-label="Save category"
+                            :show-cancel="true"
+                            @save="updateCategory(category)"
+                            @cancel="cancelEditing"
+                        />
+
+                        <template v-else>
+                            <div class="mentat-category-list__category-row">
+                                <div>
+                                    <strong>{{ category.name }}</strong>
+                                    <span>{{ category.technicalName }}</span>
+                                </div>
+
+                                <div class="mentat-category-list__actions">
+                                    <mt-button @click="startEditing(category)">Edit</mt-button>
+                                    <mt-button @click="deleteCategory(category)">Delete</mt-button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </mt-card>
+
+                <mt-card title="Add a category" position-identifier="mentat-category-add">
+                    <mentat-category-editor
+                        :draft="newCategoryDraft"
+                        title="Create category"
+                        description="Define the extraction template before saving the category."
+                        save-label="Create category"
+                        @save="createCategory"
+                    />
+                </mt-card>
+            </div>
         </template>
     </sw-page>
 {% endblock %}

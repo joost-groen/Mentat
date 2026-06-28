@@ -1,0 +1,38 @@
+<div class="mentat-category-list__section">
+    <div class="mentat-category-list__section-title">
+        <span>{{ sectionIndex + 1 }}. {{ getSectionTypeLabel(section.type) }}</span>
+
+        <div class="mentat-category-list__actions">
+            <mt-button @click="moveSection(-1)">Up</mt-button>
+            <mt-button @click="moveSection(1)">Down</mt-button>
+            <mt-button @click="removeSection">Remove</mt-button>
+        </div>
+    </div>
+
+    <template v-if="section.type === 'table'">
+        <mt-text-field label="Table heading" v-model="section.heading" />
+
+        <div
+            v-for="(row, rowIndex) in section.rows"
+            :key="rowIndex"
+            class="mentat-category-list__table-row"
+        >
+            <mt-text-field label="Field key" v-model="row.key" />
+            <mt-text-field label="Label" v-model="row.label" />
+            <mt-button @click="removeTableRow(rowIndex)">Remove row</mt-button>
+        </div>
+
+        <mt-button @click="addTableRow">Add table row</mt-button>
+    </template>
+
+    <template v-else-if="section.type === 'legal'">
+        <mt-text-field label="Legal text" v-model="section.content" />
+    </template>
+
+    <template v-else>
+        <div class="mentat-category-list__field-grid">
+            <mt-text-field label="Field key" v-model="section.key" />
+            <mt-text-field label="LLM instruction" v-model="section.instruction" />
+        </div>
+    </template>
+</div>

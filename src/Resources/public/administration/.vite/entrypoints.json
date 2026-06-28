@@ -2,10 +2,12 @@
   "base": "/bundles/joostgroenmentat/administration/",
   "entryPoints": {
     "joost-groen-mentat": {
-      "css": [],
+      "css": [
+        "/bundles/joostgroenmentat/administration/assets/joost-groen-mentat-Dl9FCjkt.css"
+      ],
       "dynamic": [],
       "js": [
-        "/bundles/joostgroenmentat/administration/assets/joost-groen-mentat-D8VP-Jun.js"
+        "/bundles/joostgroenmentat/administration/assets/joost-groen-mentat-Cbb8RTH-.js"
       ],
       "legacy": false,
       "preload": []
