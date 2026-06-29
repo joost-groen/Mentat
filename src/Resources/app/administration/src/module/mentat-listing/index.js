@@ -34,11 +34,11 @@ Shopware.Module.register('mentat-listing', {
     },
     {
         id: 'mentat-category',
-        label: 'Mentat - Create Categories',
+        label: 'Create Categories',
         color: '#ff3d58',
         path: 'mentat.listing.category',
         icon: 'regular-list',
-        parent: 'sw-catalogue',
-        position: 101,
+        parent: 'mentat-listing',
+        position: 10,
     }],
 });
