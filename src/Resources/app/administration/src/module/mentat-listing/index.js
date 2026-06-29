@@ -1,7 +1,9 @@
+// Module imports for the Mentat plugin
 import './acl';
 import './page/mentat-listing-index';
 import './page/mentat-category-list';
 
+// Register new admin module with unique id 'mentat-listing'
 Shopware.Module.register('mentat-listing', {
     type: 'plugin',
     name: 'Mentat',

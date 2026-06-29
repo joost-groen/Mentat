@@ -1,6 +1,8 @@
+// Import the template for the category list page
 import template from './mentat-category-list.html.twig';
-import './mentat-category-list.scss';
-import '../../component/mentat-category-editor';
+import './mentat-category-list.scss'; // Import the styles for the category list page
+import '../../component/mentat-category-editor'; // Import the category editor component
+// Import the helper functions for the category template
 import {
     cloneTemplate,
     createEmptyTemplate,
