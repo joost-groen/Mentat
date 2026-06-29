@@ -3,11 +3,11 @@
   "entryPoints": {
     "joost-groen-mentat": {
       "css": [
-        "/bundles/joostgroenmentat/administration/assets/joost-groen-mentat-Dl9FCjkt.css"
+        "/bundles/joostgroenmentat/administration/assets/joost-groen-mentat-OQBIQRCm.css"
       ],
       "dynamic": [],
       "js": [
-        "/bundles/joostgroenmentat/administration/assets/joost-groen-mentat-Djr_EhH6.js"
+        "/bundles/joostgroenmentat/administration/assets/joost-groen-mentat-3lOIqYgT.js"
       ],
       "legacy": false,
       "preload": []

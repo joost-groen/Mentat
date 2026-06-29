@@ -69,5 +69,13 @@
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService"/>
         </service>
 
+        <service id="JoostGroen\Mentat\Controller\Admin\ListingDraftController" public="true">
+            <argument type="service" id="mentat_category.repository"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Llm\PromptBuilder"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Llm\LlmClientInterface"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Llm\ResultValidator"/>
+            <argument type="service" id="JoostGroen\Mentat\Service\Listing\ProductDraftWriter"/>
+        </service>
+
     </services>
 </container>

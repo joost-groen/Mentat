@@ -1,17 +1,199 @@
 {% block mentat_listing_index %}
-    <sw-page>
+    <sw-page class="mentat-listing-index">
         <template #smart-bar-header>
             <h2>Mentat – Create listing</h2>
         </template>
 
+        <template #smart-bar-actions>
+            <mt-button
+                variant="primary"
+                :disabled="!canSubmit"
+                @click="createDraftListing"
+            >
+                {{ isSubmitting ? 'Creating draft...' : 'Create draft listing' }}
+            </mt-button>
+        </template>
+
         <template #content>
-            <mt-card title="Product" position-identifier="mentat-listing-product">
-                <mt-text-field label="Product name" v-model="productName" />
-                <mt-text-field label="Price" v-model="price" />
-                <mt-text-field label="Stock" v-model="stock" />
-                <mt-select label="Category" v-model="categoryId" :options="categories" />
-                <p>Live preview: {{ productName }} - {{ price }}$ - Stock: {{ stock }}</p>
-            </mt-card>
+            <div class="mentat-listing-index__content">
+                <div
+                    v-if="errors.length > 0"
+                    class="mentat-listing-index__notice mentat-listing-index__notice--error"
+                >
+                    <strong>Before Mentat can create a draft:</strong>
+                    <ul>
+                        <li v-for="error in errors" :key="error">{{ error }}</li>
+                    </ul>
+                </div>
+
+                <div
+                    v-if="isSubmitting"
+                    class="mentat-listing-index__notice mentat-listing-index__notice--info"
+                >
+                    Mentat is reading the PDF with Gemini and creating an inactive Shopware product draft.
+                    This can take up to a couple of minutes.
+                </div>
+
+                <div
+                    v-if="result"
+                    class="mentat-listing-index__notice mentat-listing-index__notice--success"
+                >
+                    <div>
+                        <strong>Draft product created.</strong>
+                        Review the extracted values below before activating the product.
+                    </div>
+
+                    <mt-button @click="openProduct">Open product draft</mt-button>
+                </div>
+
+                <div class="mentat-listing-index__grid">
+                    <mt-card title="Product details" position-identifier="mentat-listing-product">
+                        <div class="mentat-listing-index__card-copy">
+                            These values become the core Shopware product data. Mentat will keep the new
+                            product inactive so it can be reviewed first.
+                        </div>
+
+                        <div class="mentat-listing-index__field-grid">
+                            <mt-text-field
+                                label="Product name"
+                                v-model="form.name"
+                                placeholder="e.g. Industrial safety glove"
+                            />
+
+                            <mt-text-field
+                                label="Product number"
+                                v-model="form.productNumber"
+                                placeholder="e.g. MENTAT-10001"
+                            />
+
+                            <mt-text-field
+                                label="Gross price"
+                                v-model="form.price"
+                                placeholder="0.00"
+                            />
+
+                            <mt-text-field
+                                label="Stock"
+                                v-model="form.stock"
+                                placeholder="0"
+                            />
+                        </div>
+                    </mt-card>
+
+                    <mt-card title="Category template" position-identifier="mentat-listing-category">
+                        <div class="mentat-listing-index__card-copy">
+                            Choose the Mentat category that matches the spec sheet. Its template controls
+                            what Gemini extracts and how the product description is rendered.
+                        </div>
+
+                        <mt-select
+                            label="Mentat category"
+                            v-model="categoryId"
+                            :options="categoryOptions"
+                            :disabled="isLoadingCategories"
+                        />
+
+                        <div
+                            v-if="selectedCategory"
+                            class="mentat-listing-index__template-summary"
+                        >
+                            <div class="mentat-listing-index__summary-header">
+                                <strong>{{ selectedCategory.name }}</strong>
+                                <span>{{ templateFieldCount }} extracted fields</span>
+                            </div>
+
+                            <ul>
+                                <li
+                                    v-for="(section, index) in templateSections"
+                                    :key="section.type + '-' + index"
+                                >
+                                    {{ getSectionLabel(section) }}
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div
+                            v-else
+                            class="mentat-listing-index__empty-state"
+                        >
+                            Select a category to preview the extraction template.
+                        </div>
+                    </mt-card>
+                </div>
+
+                <mt-card title="Spec-sheet PDF" position-identifier="mentat-listing-pdf">
+                    <div class="mentat-listing-index__upload">
+                        <div>
+                            <strong>Upload the supplier spec sheet</strong>
+                            <p>
+                                Mentat sends this PDF to Gemini together with the selected category template.
+                            </p>
+                        </div>
+
+                        <label class="mentat-listing-index__file-button">
+                            Choose PDF
+                            <input
+                                ref="pdfInput"
+                                type="file"
+                                accept="application/pdf,.pdf"
+                                @change="onFileChange"
+                            >
+                        </label>
+                    </div>
+
+                    <div
+                        v-if="pdfFile"
+                        class="mentat-listing-index__file"
+                    >
+                        <div>
+                            <strong>{{ pdfFile.name }}</strong>
+                            <span>{{ formatFileSize(pdfFile.size) }}</span>
+                        </div>
+
+                        <mt-button @click="clearPdfFile">Remove</mt-button>
+                    </div>
+                </mt-card>
+
+                <mt-card
+                    v-if="result"
+                    title="Extraction review"
+                    position-identifier="mentat-listing-results"
+                >
+                    <div
+                        v-if="hasWarnings"
+                        class="mentat-listing-index__notice mentat-listing-index__notice--warning"
+                    >
+                        <strong>Review recommended.</strong>
+                        Some fields were empty or missing from Gemini's response.
+
+                        <div
+                            v-if="emptyFields.length > 0"
+                            class="mentat-listing-index__warning-list"
+                        >
+                            Empty fields: {{ emptyFields.join(', ') }}
+                        </div>
+
+                        <div
+                            v-if="missingFields.length > 0"
+                            class="mentat-listing-index__warning-list"
+                        >
+                            Missing fields: {{ missingFields.join(', ') }}
+                        </div>
+                    </div>
+
+                    <div class="mentat-listing-index__results">
+                        <div
+                            v-for="entry in extractedEntries"
+                            :key="entry.key"
+                            class="mentat-listing-index__result-row"
+                            :class="{ 'is-empty': entry.isEmpty }"
+                        >
+                            <span>{{ entry.key }}</span>
+                            <strong>{{ entry.value }}</strong>
+                        </div>
+                    </div>
+                </mt-card>
+            </div>
         </template>
     </sw-page>
 {% endblock %}
